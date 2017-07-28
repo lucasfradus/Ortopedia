@@ -8,6 +8,6 @@ $route['translate_uri_dashes'] = FALSE;
 
 
 $route['Clientes'] = 'Persona/indexClientes';
-$route['Empleados'] = 'Persona/indexClientes';
-$route['Proveedores'] = 'Persona/indexClientes';
+$route['Empleados'] = 'Persona/indexEmpleados';
+$route['Proveedores'] = 'Persona/indexProveedores';
 
