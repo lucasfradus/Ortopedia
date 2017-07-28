@@ -5,7 +5,7 @@
 
 <div align="left">
 	<div class="btn-group" role="group" aria-label="...">
-		 <a href=<?= base_url('persona/add/'.$id); ?> type="button" class="btn btn-default">Nuevo Cliente</a> 
+		 <a href=<?= base_url('Persona/Add/'.$id); ?> type="button" class="btn btn-default">Nuevo <?= $id ?></a> 
 	</div>
 </div>
 

@@ -28,24 +28,27 @@ class Persona_model extends CI_Model
                     ->where('tipo_persona','1');
         return $this->db->get('personas')->result_array();
     }
+
     /*
-     * Get all clientes
+     * Get all Empleados
+     */
+       function get_all_personas_Empleados()
+    {
+        $this->db->order_by('id_persona', 'desc')
+                    ->where('tipo_persona','2');
+        return $this->db->get('personas')->result_array();
+    }
+
+    /*
+     * Get all Proveedores
      */
        function get_all_personas_Proveedores()
     {
         $this->db->order_by('id_persona', 'desc')
-                ->where('tipo_persona','2');
+                ->where('tipo_persona','3');
         return $this->db->get('personas')->result_array();
     }
-     /*
-     * Get all clientes
-     */
-
-       function get_all_personas_Empleados()
-    {
-        $this->db->order_by('id_persona', 'desc');
-        return $this->db->get('personas')->result_array();
-    }
+  
         
     /*
      * function to add new persona
@@ -71,5 +74,21 @@ class Persona_model extends CI_Model
     function delete_persona($id_persona)
     {
         return $this->db->delete('personas',array('id_persona'=>$id_persona));
+    }
+
+    function ConsultarDNI($data){     
+    $array = array(
+        'dni_persona =' => $data
+        );
+        $this->db->select('dni_persona')
+                ->from('personas')
+                ->where($array);
+                $query = $this->db->get();
+                    if ($query->num_rows()>0){
+                         return true;
+                        }else{
+                            return false;
+                            }
+
     }
 }

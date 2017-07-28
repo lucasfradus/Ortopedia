@@ -9,7 +9,11 @@ class Persona extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('Persona_model');
+        $this->load->helper('url');
+        $this->load->helper('form');
+        $this->load->library('form_validation');
         $this->load->view('header.php');
+        $this->load->helper(array('url','language'));
     } 
 
   function index()
@@ -28,7 +32,8 @@ class Persona extends CI_Controller{
     function indexClientes()
     {
         $data['tittle'] = 'Listado de Clientes';
-        $data['id'] = '1';
+        $data['id'] = 'Cliente';
+        $data['id_tipo'] = '1';
         $data['personas'] = $this->Persona_model->get_all_personas_Clientes();
         $data['_view'] = 'persona/index';
         $this->load->view('layouts/main',$data);
@@ -37,7 +42,8 @@ class Persona extends CI_Controller{
     function indexEmpleados()
     {
         $data['tittle'] = 'Listado de Empleados';
-        $data['id'] = '2';
+        $data['id'] = 'Empleado';
+        $data['id_tipo'] = '2';
         $data['personas'] = $this->Persona_model->get_all_personas_Empleados();
         $data['_view'] = 'persona/index';
         $this->load->view('layouts/main',$data);
@@ -46,28 +52,37 @@ class Persona extends CI_Controller{
     function indexProveedores()
     {
         $data['tittle'] = 'Listado de Proveedores';
-        $data['id'] = '3';
+        $data['id'] = 'Proveedor';
+        $data['id_tipo'] = '3';
         $data['personas'] = $this->Persona_model->get_all_personas_Proveedores();
         $data['_view'] = 'persona/index';
         $this->load->view('layouts/main',$data);
     }   
     /*
-     * Creo una nueva persona, el id que recibo, indica si es cliente, empleado o proveedor
+     * Creo una nueva persona, el id que saco del link, indica si es cliente, empleado o proveedor
      */
-    function add($id)
+    function add()
     {   
-        $this->load->library('form_validation');
+        $id_tipo = $this->uri->segment(3);
+           if ( strcasecmp( $id_tipo, 'Cliente' ) == 0 ){
+                        $id = '1';  
+                    }else if(strcasecmp( $id_tipo, 'Empleado' ) == 0){
+                        $id = '2';  
+                    }else if(strcasecmp( $id_tipo, 'Proveedor' ) == 0){
+                        $id = '3';  
+                    } 
 
-		$this->form_validation->set_rules('dni_persona','Dni Persona','required');
-		$this->form_validation->set_rules('nombre_persona','Nombre Persona','required');
-		$this->form_validation->set_rules('apellido_persona','Apellido Persona','required');
-		$this->form_validation->set_rules('tel_persona','Tel Persona','required');
-		$this->form_validation->set_rules('mail_persona','Mail Persona','required');
+        $this->load->library('form_validation');
+		$this->form_validation->set_rules('dni_persona','DNI','required|numeric|exact_length[8]|callback_dni_check');
+		$this->form_validation->set_rules('nombre_persona','Nombre','required');
+		$this->form_validation->set_rules('apellido_persona','Apellido','required');
+		$this->form_validation->set_rules('tel_persona','Telefono','required');
+		$this->form_validation->set_rules('mail_persona','Mail','required');
 		
 		if($this->form_validation->run())     
         {   
             $params = array(
-				'tipo_persona' => $id,
+				'tipo_persona' => $this->input->post('tipo_persona'),
 				'dni_persona' => $this->input->post('dni_persona'),
 				'nombre_persona' => $this->input->post('nombre_persona'),
 				'apellido_persona' => $this->input->post('apellido_persona'),
@@ -80,17 +95,44 @@ class Persona extends CI_Controller{
             );
             
             $persona_id = $this->Persona_model->add_persona($params);
-            redirect('persona/index');
+            redirect('Clientes');
         }
         else
         {
+            $data['id_tipo'] = $id_tipo;
+            $data['id'] = $id;
 			$this->load->model('Tipo_persona_model');
 			$data['all_tipo_persona'] = $this->Tipo_persona_model->get_all_tipo_persona();
-            
-            $data['_view'] = 'persona/add';
+            $data['_view'] = 'Persona/Add';
             $this->load->view('layouts/main',$data);
         }
     }  
+      //esta funcion chequea si ya existe algun cliente con el dni que se esta tratando de cargar
+        function dni_check($str){
+            if ($this->Persona_model->ConsultarDNI($str)){
+                $this->form_validation->set_message('dni_check', 'So boludo topo el {field} ya esta cargado');
+                //$this->form_validation->set_message('dni_persona', 'TOPOOOO');
+                //$this->form_validation->set_message('dni_check', sprintf(lang('val_dni_check'), $str, $nombre));
+                    return FALSE;
+            }
+                else{
+                        return TRUE;
+                }
+            }
+                //Esta funcion valida que la fecha ingresada no sea posterior a la fecha del dia
+            function date_check($date){
+                            if( strtotime($date) > strtotime('now') ) {
+                                    $this->form_validation->set_message('date_check', sprintf(lang('val_date_check'), $date));
+                                            return FALSE;
+                            }
+                                    else{
+                                                    return TRUE;
+                                    }
+                    }
+
+
+
+
 
     /*
      * Editing a persona
@@ -152,7 +194,7 @@ class Persona extends CI_Controller{
         if(isset($persona['id_persona']))
         {
             $this->Persona_model->delete_persona($id_persona);
-            redirect('persona/index');
+            redirect('Clientes');
         }
         else
             show_error('The persona you are trying to delete does not exist.');
