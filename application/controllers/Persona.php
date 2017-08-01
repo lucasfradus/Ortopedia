@@ -14,6 +14,8 @@ class Persona extends CI_Controller{
         $this->load->library('form_validation');
         $this->load->view('header.php');
         $this->load->helper(array('url','language'));
+        $this->load->library('session');
+        $this->lang->load('spanish');
     } 
 
   function index()
@@ -65,19 +67,33 @@ class Persona extends CI_Controller{
     {   
         $id_tipo = $this->uri->segment(3);
            if ( strcasecmp( $id_tipo, 'Cliente' ) == 0 ){
-                        $id = '1';  
+                        $id = '1'; 
+                        $data['title'] = lang('title_new_user'); 
                     }else if(strcasecmp( $id_tipo, 'Empleado' ) == 0){
                         $id = '2';  
+                        $data['title'] = lang('title_new_emplyee'); 
                     }else if(strcasecmp( $id_tipo, 'Proveedor' ) == 0){
-                        $id = '3';  
+                        $id = '3'; 
+                        $data['title'] = lang('title_new_suplayer');  
                     } 
 
         $this->load->library('form_validation');
-		$this->form_validation->set_rules('dni_persona','DNI','required|numeric|exact_length[8]|callback_dni_check');
+		$this->form_validation->set_rules('dni_persona','DNI','required|numeric|exact_length[8]|is_unique[personas.dni_persona]',
+            array(
+                'required'      => 'El campo %s es obligatorio.', 
+                'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
+                ));
 		$this->form_validation->set_rules('nombre_persona','Nombre','required');
 		$this->form_validation->set_rules('apellido_persona','Apellido','required');
-		$this->form_validation->set_rules('tel_persona','Telefono','required');
-		$this->form_validation->set_rules('mail_persona','Mail','required');
+		$this->form_validation->set_rules('tel_persona','Telefono','required|numeric');
+        $this->form_validation->set_rules('cp_persona','Código Postal','numeric');
+        $this->form_validation->set_rules('fecha_nac_persona','Fecha de Nacimiento','callback_date_check');
+        $this->form_validation->set_rules('mail_persona', 'Mail','valid_email|is_unique[personas.mail_persona]|required',
+                    array(
+                            'required'      => 'El campo %s es obligatorio.', 
+                            'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
+                    )
+                    );
 		
 		if($this->form_validation->run())     
         {   
@@ -95,6 +111,8 @@ class Persona extends CI_Controller{
             );
             
             $persona_id = $this->Persona_model->add_persona($params);
+            //redireccionar al perfil del cliente
+            $this->session->set_flashdata('success', lang('cli_new'));
             redirect('Clientes');
         }
         else
@@ -109,10 +127,8 @@ class Persona extends CI_Controller{
     }  
       //esta funcion chequea si ya existe algun cliente con el dni que se esta tratando de cargar
         function dni_check($str){
-            if ($this->Persona_model->ConsultarDNI($str)){
-                $this->form_validation->set_message('dni_check', 'So boludo topo el {field} ya esta cargado');
-                //$this->form_validation->set_message('dni_persona', 'TOPOOOO');
-                //$this->form_validation->set_message('dni_check', sprintf(lang('val_dni_check'), $str, $nombre));
+            if ($this->Persona_model->ConsultarDNI($str)){ 
+                $this->form_validation->set_message('dni_check', sprintf(lang('val_dni_check'), $str));
                     return FALSE;
             }
                 else{
@@ -120,25 +136,29 @@ class Persona extends CI_Controller{
                 }
             }
                 //Esta funcion valida que la fecha ingresada no sea posterior a la fecha del dia
-            function date_check($date){
-                            if( strtotime($date) > strtotime('now') ) {
-                                    $this->form_validation->set_message('date_check', sprintf(lang('val_date_check'), $date));
-                                            return FALSE;
-                            }
-                                    else{
-                                                    return TRUE;
-                                    }
+        function date_check($date){
+            if( strtotime($date) > strtotime('now') ) {
+                   $this->form_validation->set_message('date_check', sprintf(lang('val_date_check'), $date));
+                return FALSE;
+            }
+                    else{
+                        return TRUE;
                     }
-
-
-
-
-
+                }
     /*
      * Editing a persona
      */
     function edit($id_persona)
     {   
+        $id_persona = $this->uri->segment(4);
+         $id_tipo = $this->uri->segment(3);
+           if ( strcasecmp( $id_tipo, 'Cliente' ) == 0 ){
+                        $id = '1';  
+                    }else if(strcasecmp( $id_tipo, 'Empleado' ) == 0){
+                        $id = '2';  
+                    }else if(strcasecmp( $id_tipo, 'Proveedor' ) == 0){
+                        $id = '3';  
+                    } 
         // check if the persona exists before trying to edit it
         $data['persona'] = $this->Persona_model->get_persona($id_persona);
         
@@ -146,12 +166,22 @@ class Persona extends CI_Controller{
         {
             $this->load->library('form_validation');
 
-			$this->form_validation->set_rules('dni_persona','Dni Persona','required');
-			$this->form_validation->set_rules('nombre_persona','Nombre Persona','required');
-			$this->form_validation->set_rules('apellido_persona','Apellido Persona','required');
-			$this->form_validation->set_rules('tel_persona','Tel Persona','required');
-			$this->form_validation->set_rules('mail_persona','Mail Persona','required');
-		
+        $this->form_validation->set_rules('dni_persona','DNI','required|numeric|exact_length[8]|is_unique[personas.dni_persona]',
+            array(
+                'required'      => 'El campo %s es obligatorio.', 
+                'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
+                ));
+        $this->form_validation->set_rules('nombre_persona','Nombre','required');
+        $this->form_validation->set_rules('apellido_persona','Apellido','required');
+        $this->form_validation->set_rules('tel_persona','Telefono','required|numeric');
+        $this->form_validation->set_rules('cp_persona','Código Postal','numeric');
+        $this->form_validation->set_rules('fecha_nac_persona','Fecha de Nacimiento','callback_date_check');
+        $this->form_validation->set_rules('mail_persona', 'Mail','valid_email|is_unique[personas.mail_persona]|required',
+                    array(
+                            'required'      => 'El campo %s es obligatorio.', 
+                            'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
+                    )
+		 );
 			if($this->form_validation->run())     
             {   
                 $params = array(
@@ -172,6 +202,8 @@ class Persona extends CI_Controller{
             }
             else
             {
+                $data['id_tipo'] = $id_tipo;
+                  $data['id'] = $id;
 				$this->load->model('Tipo_persona_model');
 				$data['all_tipo_persona'] = $this->Tipo_persona_model->get_all_tipo_persona();
 
