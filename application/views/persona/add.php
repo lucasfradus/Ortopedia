@@ -1,7 +1,7 @@
 <?php echo form_open('Persona/Add/'.$id_tipo,array("class"=>"form-horizontal")); ?>
-
-
-
+	<div align="center">
+			 <h2><?= $title ?> </h2>
+	</div> 
 <div class="row well">
 	<div align="center">
 	<div class="form-group">
@@ -24,7 +24,7 @@
 		-->
 	</div>
 	<div class="form-group">
-		<label for="dni_persona" class="col-md-4 control-label"><span class="text-danger">*</span>DNI</label>
+		<label for="dni_persona" class="col-md-4 control-label"><span class="text-danger">*</span><?= lang('cli_dni') ?></label>
 		<div class="col-xs-3">
 			<input type="text" name="dni_persona" value="<?php echo $this->input->post('dni_persona'); ?>" class="form-control" id="dni_persona" />
 			<span class="text-danger"><?php echo form_error('dni_persona');?></span>
@@ -47,7 +47,17 @@
 	<div class="form-group">
 		<label for="fecha_nac_persona" class="col-md-4 control-label">Fecha de Nacimiento</label>
 		<div class="col-xs-3">
-			<input type="text" name="fecha_nac_persona" value="<?php echo $this->input->post('fecha_nac_persona'); ?>" class="form-control" id="fecha_nac_persona" />
+			<input class="form-control" type="date" name="fecha_nac_persona" value="<?= $this->input->post('fecha_nac_persona'); ?>" id="fecha_nac_persona" />
+					<script>
+					if (!Modernizr.touch || !Modernizr.inputtypes.date) {
+					$('input[type=date]')
+					.attr('type', 'text')
+					.datepicker({
+						dateFormat: 'dd-mm-yy'
+					});
+					}
+					</script>
+					<span class="text-danger"><?php echo form_error('fecha_nac_persona');?></span>
 		</div>
 	</div>
 	<div class="form-group">
@@ -67,6 +77,7 @@
 		<label for="cp_persona" class="col-md-4 control-label">Código Postal</label>
 		<div class="col-xs-3">
 			<input type="text" name="cp_persona" value="<?php echo $this->input->post('cp_persona'); ?>" class="form-control" id="cp_persona" />
+		<span class="text-danger"><?php echo form_error('cp_persona');?></span>
 		</div>
 	</div>
 	<div class="form-group">

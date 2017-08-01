@@ -1,5 +1,12 @@
 <?php echo form_open('persona/edit/'.$persona['id_persona'],array("class"=>"form-horizontal")); ?>
 
+<div align="center">
+			 <h2><?= lang('cli_edit_user_tittle') ?> </h2>
+	</div> 
+
+<input type="hidden" name="tipo_persona" value="<?= $id ?>">
+
+	<!--
 	<div class="form-group">
 		<label for="tipo_persona" class="col-md-4 control-label">Tipo Persona</label>
 		<div class="col-md-8">
@@ -16,6 +23,7 @@
 			</select>
 		</div>
 	</div>
+	-->
 	<div class="form-group">
 		<label for="dni_persona" class="col-md-4 control-label"><span class="text-danger">*</span>Dni Persona</label>
 		<div class="col-md-8">
@@ -40,7 +48,23 @@
 	<div class="form-group">
 		<label for="fecha_nac_persona" class="col-md-4 control-label">Fecha Nac Persona</label>
 		<div class="col-md-8">
-			<input type="text" name="fecha_nac_persona" value="<?php echo ($this->input->post('fecha_nac_persona') ? $this->input->post('fecha_nac_persona') : $persona['fecha_nac_persona']); ?>" class="form-control" id="fecha_nac_persona" />
+
+		<input class="form-control" type="date" name="fecha_nac_persona" value="<?php echo ($this->input->post('fecha_nac_persona') ? $this->input->post('fecha_nac_persona') : $persona['fecha_nac_persona']); ?>" id="fecha_nac_persona" />
+					<script>
+					if (!Modernizr.touch || !Modernizr.inputtypes.date) {
+					$('input[type=date]')
+					.attr('type', 'text')
+					.datepicker({
+						dateFormat: 'dd-mm-yy'
+					});
+					}
+					</script>
+					<span class="text-danger"><?php echo form_error('fecha_nac_persona');?></span>
+
+
+
+
+			
 		</div>
 	</div>
 	<div class="form-group">

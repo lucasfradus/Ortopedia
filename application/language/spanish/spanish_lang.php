@@ -17,7 +17,7 @@ $lang['error_no_login']         = 'Necesitas estar logueado para ver esta pagina
 $lang['error_no_permission']    = 'No tienes permiso para realizar esta acción.';
 
 //validaciones
-$lang['val_dni_check']          = 'El DNI %s ya se encuentra ingresado en el sistema. Para voler a utilizarlo, debe activarlo. Nombre: %s';
+$lang['val_dni_check']          = 'El DNI %s ya se encuentra ingresado en el sistema.';
 $lang['val_date_check']         = 'La fecha %s es posterior a la fecha de hoy. Por favor introducir una fecha valida.';
 
 //clientes
@@ -27,7 +27,7 @@ $lang['cli_delete_success']     = 'Se Deshabilito Correctamente al cliente %s';
 $lang['cli_delete_error']       = 'No se pudo eliminar al cliente %s, por favor intente nuevamente más tarde.';
 $lang['cli_enable_success']     = 'Se habilito Correctamente al cliente %s.';
 $lang['cli_enable_error']       = 'No se pudo habilitar al cliente %s, por favor intente nuevamente más tarde.';
-$lang['cli_new_user_tittle']    = 'Alta de Clientes';
+
 $lang['cli_personal_data']      = 'Datos personales';
 $lang['cli_mandatory_fields']   = 'Los campos con * son de caracter obligatorio.';
 $lang['cli_once_saved']         = 'Una vez guardado este campo no se puede modificar.';
@@ -65,7 +65,8 @@ $lang['cli_admin_due_date']     = 'Esta Fecha se tomará como fecha de Vencimien
 $lang['cli_admin_plan']         = 'Plan';
 $lang['cli_admin_status']       = 'Estado';
 $lang['cli_admin_save_btn']     = 'Guardar!';
-
+$lang['cli_mail_mandatory']     = 'El campo Mail es obligatorio';
+$lang['cli_mail_exists']        = 'El %s ya se encuentra cargado en el sistema.';
 
 //ingresos
 $lang['ing_success']             = 'Se realizo el ingreso manual de %s.';
@@ -118,6 +119,9 @@ $lang['title_products']          = 'Productos';
 $lang['title_products_add']      = 'Alta de Productos';
 $lang['title_planes_add']        = 'Alta de Planes';
 $lang['title_planes']            = 'Planes';
+$lang['title_new_user']          = 'Alta de Clientes';
+$lang['title_new_emplyee']       = 'Alta de Empleados';
+$lang['title_new_suplayer']      = 'Alta de Proveedores';
 
 //productos
 
