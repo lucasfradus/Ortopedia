@@ -9,6 +9,9 @@ class Ventum extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('Ventum_model');
+        
+        
+        date_default_timezone_set("America/Argentina/Buenos_Aires");
     } 
 
     /*
@@ -16,31 +19,54 @@ class Ventum extends CI_Controller{
      */
     function index()
     {
-        $data['venta'] = $this->Ventum_model->get_all_venta();
+        $data['venta'] = $this->Ventum_model->get_all_venta();$this->load->model('Persona_model');
+            $data['all_personas'] = $this->Persona_model->get_all_personas_Clientes();
+
+            $this->load->model('Producto_model');
+            $data['all_producto'] = $this->Producto_model->get_all_producto();
+
         
         $data['_view'] = 'ventum/index';
         $this->load->view('layouts/main',$data);
     }
 
     /*
-     * Adding a new ventum
+     * Creo una nueva venta
      */
     function add()
     {   
-        if(isset($_POST) && count($_POST) > 0)     
+        $this->load->library('form_validation');
+        $this->load->model('Productos_pedido_model');
+        $this->form_validation->set_rules('id_cliente_venta','Id Cliente Venta','required');        
+        if($this->form_validation->run())     
         {   
             $params = array(
-				'id_cliente_venta' => $this->input->post('id_cliente_venta'),
-				'id_productos_venta' => $this->input->post('id_productos_venta'),
-				'hora_venta' => $this->input->post('hora_venta'),
-				'fecha_venta' => $this->input->post('fecha_venta'),
+                'id_cliente_venta' => $this->input->post('id_cliente_venta'),
+                'hora_venta' => "" . date("G:i:s") . "",
+                'fecha_venta' =>  "" . date("Y-m-d") ."",
             );
-            
+            //cargo una parte de la venta y recibo el id 
             $ventum_id = $this->Ventum_model->add_ventum($params);
+            //recorro el array con la cantidad de procuctos que recibi y los voy cargando en otra tabla
+                    $productos = $this->input->post('id_productos_venta');
+                        foreach($productos as $producto)
+                            {
+                                $params2 = array(
+                                    'id_pedido' => $ventum_id,
+                                    'id_producto' => $producto,
+                                );
+                                $this->Productos_pedido_model->add_productos_pedido($params2);
+                            }
             redirect('ventum/index');
         }
         else
-        {            
+        {
+            $this->load->model('Persona_model');
+            $data['all_personas'] = $this->Persona_model->get_all_personas_Clientes();
+
+            $this->load->model('Producto_model');
+            $data['all_producto'] = $this->Producto_model->get_all_producto();
+            
             $data['_view'] = 'ventum/add';
             $this->load->view('layouts/main',$data);
         }
@@ -56,13 +82,24 @@ class Ventum extends CI_Controller{
         
         if(isset($data['ventum']['id_venta']))
         {
-            if(isset($_POST) && count($_POST) > 0)     
+            $this->load->library('form_validation');
+
+            $this->form_validation->set_rules('id_cliente_venta','Id Cliente Venta','required');
+            $this->form_validation->set_rules('id_productos_venta','Id Productos Venta','required');
+        
+            if($this->form_validation->run())     
             {   
                 $params = array(
-					'id_cliente_venta' => $this->input->post('id_cliente_venta'),
-					'id_productos_venta' => $this->input->post('id_productos_venta'),
-					'hora_venta' => $this->input->post('hora_venta'),
-					'fecha_venta' => $this->input->post('fecha_venta'),
+                    'id_cliente_venta' => $this->input->post('id_cliente_venta'),
+                    'id_productos_venta' => $this->input->post('id_productos_venta'),
+                    'hora_venta' => $this->input->post('hora_venta'),
+                    'fecha_venta' => $this->input->post('fecha_venta'),
+
+
+
+
+
+
                 );
 
                 $this->Ventum_model->update_ventum($id_venta,$params);            
@@ -70,6 +107,12 @@ class Ventum extends CI_Controller{
             }
             else
             {
+                $this->load->model('Persona_model');
+                $data['all_personas'] = $this->Persona_model->get_all_personas();
+
+                $this->load->model('Producto_model');
+                $data['all_producto'] = $this->Producto_model->get_all_producto();
+
                 $data['_view'] = 'ventum/edit';
                 $this->load->view('layouts/main',$data);
             }

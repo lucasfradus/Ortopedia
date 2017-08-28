@@ -25,6 +25,8 @@ class Ventum_model extends CI_Model
     function get_all_venta()
     {
         $this->db->order_by('id_venta', 'desc');
+           $this->db->join('productos_pedido', 'id_productos_venta = id_producto');
+           $this->db->join('personas', 'id_cliente_venta = id_persona');
         return $this->db->get('venta')->result_array();
     }
         

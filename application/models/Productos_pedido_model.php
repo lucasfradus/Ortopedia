@@ -14,9 +14,9 @@ class Productos_pedido_model extends CI_Model
     /*
      * Get productos_pedido by 
      */
-    function get_productos_pedido($)
+    function get_productos_pedido($param)
     {
-        return $this->db->get_where('productos_pedido',array(''=>$))->row_array();
+        return $this->db->get_where('productos_pedido',array(''=>$param))->row_array();
     }
         
     /*
@@ -29,7 +29,7 @@ class Productos_pedido_model extends CI_Model
     }
         
     /*
-     * function to add new productos_pedido
+     *  recibo array con id de venta e id de producto
      */
     function add_productos_pedido($params)
     {
@@ -40,17 +40,17 @@ class Productos_pedido_model extends CI_Model
     /*
      * function to update productos_pedido
      */
-    function update_productos_pedido($,$params)
+    function update_productos_pedido($param,$params)
     {
-        $this->db->where('',$);
+        $this->db->where('',$param);
         return $this->db->update('productos_pedido',$params);
     }
     
     /*
      * function to delete productos_pedido
      */
-    function delete_productos_pedido($)
+    function delete_productos_pedido($param)
     {
-        return $this->db->delete('productos_pedido',array(''=>$));
+        return $this->db->delete('productos_pedido',array(''=>$param));
     }
 }
