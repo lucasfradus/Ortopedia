@@ -1,3 +1,4 @@
+
 <div class="pull-right">
 	<a href="<?php echo site_url('ventum/add'); ?>" class="btn btn-success">Add</a> 
 </div>
@@ -14,8 +15,8 @@
 	<?php foreach($venta as $v){ ?>
     <tr>
 		<td><?php echo $v['id_venta']; ?></td>
-		<td><?php echo $v['id_cliente_venta']; ?></td>
-		<td><?php echo $v['id_productos_venta']; ?></td>
+		<td><?php echo $v['apellido_persona'].', '.$v['nombre_persona']; ?></td>
+		<td><?php echo $v['id_producto']; ?></td>
 		<td><?php echo $v['hora_venta']; ?></td>
 		<td><?php echo $v['fecha_venta']; ?></td>
 		<td>

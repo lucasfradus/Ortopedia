@@ -1,15 +1,37 @@
 <?php echo form_open('ventum/edit/'.$ventum['id_venta'],array("class"=>"form-horizontal")); ?>
 
 	<div class="form-group">
-		<label for="id_cliente_venta" class="col-md-4 control-label">Id Cliente Venta</label>
+		<label for="id_cliente_venta" class="col-md-4 control-label"><span class="text-danger">*</span>Persona</label>
 		<div class="col-md-8">
-			<input type="text" name="id_cliente_venta" value="<?php echo ($this->input->post('id_cliente_venta') ? $this->input->post('id_cliente_venta') : $ventum['id_cliente_venta']); ?>" class="form-control" id="id_cliente_venta" />
+			<select name="id_cliente_venta" class="form-control">
+				<option value="">select persona</option>
+				<?php 
+				foreach($all_personas as $persona)
+				{
+					$selected = ($persona['id_persona'] == $ventum['id_cliente_venta']) ? ' selected="selected"' : "";
+
+					echo '<option value="'.$persona['id_persona'].'" '.$selected.'>'.$persona['nombre_persona'].'</option>';
+				} 
+				?>
+			</select>
+			<span class="text-danger"><?php echo form_error('id_cliente_venta');?></span>
 		</div>
 	</div>
 	<div class="form-group">
-		<label for="id_productos_venta" class="col-md-4 control-label">Id Productos Venta</label>
+		<label for="id_productos_venta" class="col-md-4 control-label"><span class="text-danger">*</span>Producto</label>
 		<div class="col-md-8">
-			<input type="text" name="id_productos_venta" value="<?php echo ($this->input->post('id_productos_venta') ? $this->input->post('id_productos_venta') : $ventum['id_productos_venta']); ?>" class="form-control" id="id_productos_venta" />
+			<select name="id_productos_venta" class="form-control">
+				<option value="">select producto</option>
+				<?php 
+				foreach($all_producto as $producto)
+				{
+					$selected = ($producto['id_producto'] == $ventum['id_productos_venta']) ? ' selected="selected"' : "";
+
+					echo '<option value="'.$producto['id_producto'].'" '.$selected.'>'.$producto['nombre_producto'].'</option>';
+				} 
+				?>
+			</select>
+			<span class="text-danger"><?php echo form_error('id_productos_venta');?></span>
 		</div>
 	</div>
 	<div class="form-group">
