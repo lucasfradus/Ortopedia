@@ -34,7 +34,7 @@
 					//aca cheqeo si el producto tiene stock, si no tiene lo deshabilito para que no lo vendan
 					$disabled = ($producto['stock_producto'] == 0) ? 'disabled' : "";	
 
-					echo '<option '.$disabled.' value="'.$producto['id_producto'].'" '.$selected.'>'.$producto['nombre_producto'].'</option>';
+					echo '<option '.$disabled.' value="'.$producto['id_producto'].'" '.$selected.'>'.$producto['nombre_producto'].'-'.$producto['precio_venta_producto'].'</option>';
 				} 
 				?>
 			</select>
@@ -52,13 +52,6 @@
 
 <?php echo form_close(); ?>
 
-   <script type="text/javascript">
-var tomorrow = new Date();
-tomorrow.setTime(tomorrow.getTime() + (1000*3600*24));       
-document.getElementById("spanDate").innerHTML = tomorrow.getFullYear()  + "-" + tomorrow.getMonth() + "-" + tomorrow.getDate()  ;
 
-document.getElementById("spanDate2").innerHTML = tomorrow.getHours()  + ":" + tomorrow.getMinutes() + ":" + tomorrow.getSeconds();
-
-    </script>
 
 

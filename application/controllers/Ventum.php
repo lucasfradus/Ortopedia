@@ -19,15 +19,10 @@ class Ventum extends CI_Controller{
      */
     function index()
     {
-        $data['venta'] = $this->Ventum_model->get_all_venta();$this->load->model('Persona_model');
-            $data['all_personas'] = $this->Persona_model->get_all_personas_Clientes();
-
-            $this->load->model('Producto_model');
-            $data['all_producto'] = $this->Producto_model->get_all_producto();
-
-        
+        $data['venta'] = $this->Ventum_model->get_all_venta(); 
         $data['_view'] = 'ventum/index';
         $this->load->view('layouts/main',$data);
+
     }
 
     /*
@@ -37,6 +32,7 @@ class Ventum extends CI_Controller{
     {   
         $this->load->library('form_validation');
         $this->load->model('Productos_pedido_model');
+        $this->load->model('Producto_model');
         $this->form_validation->set_rules('id_cliente_venta','Id Cliente Venta','required');        
         if($this->form_validation->run())     
         {   
@@ -49,14 +45,20 @@ class Ventum extends CI_Controller{
             $ventum_id = $this->Ventum_model->add_ventum($params);
             //recorro el array con la cantidad de procuctos que recibi y los voy cargando en otra tabla
                     $productos = $this->input->post('id_productos_venta');
+                    $monto=0;
                         foreach($productos as $producto)
                             {
+                                //traigo el valor de cada producto y lo sumo para agregar a la venta
+                                $costo = $this->Producto_model->get_productos_price($producto);
+                                $monto= $monto + $costo;
                                 $params2 = array(
                                     'id_pedido' => $ventum_id,
                                     'id_producto' => $producto,
+                                    'costo' => $costo,
                                 );
                                 $this->Productos_pedido_model->add_productos_pedido($params2);
                             }
+                    $this->Ventum_model->update_ventum_monto($ventum_id,$monto);        
             redirect('ventum/index');
         }
         else
@@ -108,7 +110,7 @@ class Ventum extends CI_Controller{
             else
             {
                 $this->load->model('Persona_model');
-                $data['all_personas'] = $this->Persona_model->get_all_personas();
+                $data['all_personas'] = $this->Persona_model->get_all_personas_Clientes();
 
                 $this->load->model('Producto_model');
                 $data['all_producto'] = $this->Producto_model->get_all_producto();
@@ -122,13 +124,14 @@ class Ventum extends CI_Controller{
     } 
 
     /*
-     * Deleting ventum
+     * Eliminio una venta
+     * TODO: eliminar la relacion con productos x venta
      */
     function remove($id_venta)
     {
         $ventum = $this->Ventum_model->get_ventum($id_venta);
 
-        // check if the ventum exists before trying to delete it
+        // chequeo que exista la venta antes de Eliminarla
         if(isset($ventum['id_venta']))
         {
             $this->Ventum_model->delete_ventum($id_venta);
@@ -136,6 +139,26 @@ class Ventum extends CI_Controller{
         }
         else
             show_error('The ventum you are trying to delete does not exist.');
+    }
+      /*
+     * Ver el detalle de una venta
+     */
+    function view($id_venta)
+    {
+        $ventum = $this->Ventum_model->get_ventum($id_venta);
+
+        // chequeo que exista la venta buscar los detalles
+        if(isset($ventum['id_venta']))
+        {
+             $this->load->model('Productos_pedido_model');
+                
+             $data['ventum'] = $this->Ventum_model->get_ventum($id_venta);
+             $data['producto'] = $this->Productos_pedido_model->get_productos_pedido($id_venta);
+             $data['_view'] = 'ventum/view';
+             $this->load->view('layouts/main',$data);
+        }
+        else
+            show_error('la venta que querés ver no existe.');
     }
     
 }

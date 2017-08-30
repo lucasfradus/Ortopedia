@@ -16,6 +16,7 @@ class Ventum_model extends CI_Model
      */
     function get_ventum($id_venta)
     {
+         $this->db->join('personas', 'id_cliente_venta = id_persona');
         return $this->db->get_where('venta',array('id_venta'=>$id_venta))->row_array();
     }
         
@@ -25,7 +26,6 @@ class Ventum_model extends CI_Model
     function get_all_venta()
     {
         $this->db->order_by('id_venta', 'desc');
-           $this->db->join('productos_pedido', 'id_productos_venta = id_producto');
            $this->db->join('personas', 'id_cliente_venta = id_persona');
         return $this->db->get('venta')->result_array();
     }
@@ -38,6 +38,20 @@ class Ventum_model extends CI_Model
         $this->db->insert('venta',$params);
         return $this->db->insert_id();
     }
+
+
+   /*
+     * actualizo el monto de la venta
+     */
+    function update_ventum_monto($id_venta,$params)
+    {   
+        $array = array(
+            'monto' => $params,
+            );
+        $this->db->where('id_venta',$id_venta);
+        return $this->db->update('venta',$array);
+    }
+
     
     /*
      * function to update ventum
