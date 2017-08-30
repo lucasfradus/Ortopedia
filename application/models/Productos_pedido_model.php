@@ -16,7 +16,11 @@ class Productos_pedido_model extends CI_Model
      */
     function get_productos_pedido($param)
     {
-        return $this->db->get_where('productos_pedido',array(''=>$param))->row_array();
+        $array = array(
+            'id_pedido'=>$param,
+            );
+        $this->db->where($array);
+        return $this->db->get('productos_pedido')->result_array();
     }
         
     /*

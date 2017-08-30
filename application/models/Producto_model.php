@@ -18,6 +18,15 @@ class Producto_model extends CI_Model
     {
         return $this->db->get_where('producto',array('id_producto'=>$id_producto))->row_array();
     }
+
+    /*
+     * devuelve el precio segund el id
+    */
+    function get_productos_price($param)
+    {
+
+        return $this->db->get_where('producto',array('id_producto'=>$param))->row()->precio_venta_producto;
+    }
         
     /*
      * Get all producto
