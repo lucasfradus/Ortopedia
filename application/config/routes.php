@@ -7,7 +7,7 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
-$route['Clientes'] = 'Persona/indexClientes';
-$route['Empleados'] = 'Persona/indexEmpleados';
-$route['Proveedores'] = 'Persona/indexProveedores';
+$route['Cliente'] = 'Persona/indexClientes';
+$route['Empleado'] = 'Persona/indexEmpleados';
+$route['Proveedor'] = 'Persona/indexProveedores';
 

@@ -18,8 +18,7 @@ class Producto_model extends CI_Model
     {
         return $this->db->get_where('producto',array('id_producto'=>$id_producto))->row_array();
     }
-
-    /*
+     /*
      * devuelve el precio segund el id
     */
     function get_productos_price($param)
@@ -34,6 +33,7 @@ class Producto_model extends CI_Model
     function get_all_producto()
     {
         $this->db->order_by('id_producto', 'desc');
+        $this->db->join('personas', 'id_proveedor_producto = personas.id_persona');
         return $this->db->get('producto')->result_array();
     }
         
@@ -63,3 +63,8 @@ class Producto_model extends CI_Model
         return $this->db->delete('producto',array('id_producto'=>$id_producto));
     }
 }
+
+
+
+
+
