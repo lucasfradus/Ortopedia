@@ -9,6 +9,8 @@ class Producto extends CI_Controller{
     {
         parent::__construct();
         $this->load->model('Producto_model');
+        $this->load->library('form_validation');
+        $this->load->library('validaciones'); 
     } 
 
     /*
@@ -17,6 +19,8 @@ class Producto extends CI_Controller{
     function index()
     {
         $data['producto'] = $this->Producto_model->get_all_producto();
+        $this->load->model('Persona_model');
+            $data['all_personas'] = $this->Persona_model->get_all_personas_Proveedores();
         
         $data['_view'] = 'producto/index';
         $this->load->view('layouts/main',$data);
@@ -27,22 +31,28 @@ class Producto extends CI_Controller{
      */
     function add()
     {   
-        if(isset($_POST) && count($_POST) > 0)     
+       
+       $this->form_validation->set_rules($this->validaciones->Productos());
+    
+        if($this->form_validation->run())     
         {   
             $params = array(
-				'nombre_producto' => $this->input->post('nombre_producto'),
-				'id_proveedor_producto' => $this->input->post('id_proveedor_producto'),
-				'precio_compra_producto' => $this->input->post('precio_compra_producto'),
-				'precio_venta_producto' => $this->input->post('precio_venta_producto'),
-				'stock_producto' => $this->input->post('stock_producto'),
-				'stock_minimo_producto' => $this->input->post('stock_minimo_producto'),
+                'id_proveedor_producto' => $this->input->post('id_proveedor_producto'),
+                'nombre_producto' => $this->input->post('nombre_producto'),
+                'precio_compra_producto' => $this->input->post('precio_compra_producto'),
+                'precio_venta_producto' => $this->input->post('precio_venta_producto'),
+                'stock_producto' => $this->input->post('stock_producto'),
+                'stock_minimo_producto' => $this->input->post('stock_minimo_producto'),
             );
             
             $producto_id = $this->Producto_model->add_producto($params);
             redirect('producto/index');
         }
         else
-        {            
+        {
+            $this->load->model('Persona_model');
+            $data['all_personas'] = $this->Persona_model->get_all_personas_Proveedores();
+            
             $data['_view'] = 'producto/add';
             $this->load->view('layouts/main',$data);
         }
@@ -58,15 +68,17 @@ class Producto extends CI_Controller{
         
         if(isset($data['producto']['id_producto']))
         {
-            if(isset($_POST) && count($_POST) > 0)     
+           $this->form_validation->set_rules($this->validaciones->Productos());
+        
+            if($this->form_validation->run())     
             {   
                 $params = array(
-					'nombre_producto' => $this->input->post('nombre_producto'),
-					'id_proveedor_producto' => $this->input->post('id_proveedor_producto'),
-					'precio_compra_producto' => $this->input->post('precio_compra_producto'),
-					'precio_venta_producto' => $this->input->post('precio_venta_producto'),
-					'stock_producto' => $this->input->post('stock_producto'),
-					'stock_minimo_producto' => $this->input->post('stock_minimo_producto'),
+                    'id_proveedor_producto' => $this->input->post('id_proveedor_producto'),
+                    'nombre_producto' => $this->input->post('nombre_producto'),
+                    'precio_compra_producto' => $this->input->post('precio_compra_producto'),
+                    'precio_venta_producto' => $this->input->post('precio_venta_producto'),
+                    'stock_producto' => $this->input->post('stock_producto'),
+                    'stock_minimo_producto' => $this->input->post('stock_minimo_producto'),
                 );
 
                 $this->Producto_model->update_producto($id_producto,$params);            
@@ -74,6 +86,9 @@ class Producto extends CI_Controller{
             }
             else
             {
+                $this->load->model('Persona_model');
+                $data['all_personas'] = $this->Persona_model->get_all_personas_Proveedores();
+
                 $data['_view'] = 'producto/edit';
                 $this->load->view('layouts/main',$data);
             }

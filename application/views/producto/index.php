@@ -5,8 +5,8 @@
 <table class="table table-striped table-bordered">
     <tr>
 		<th>Id Producto</th>
-		<th>Nombre Producto</th>
 		<th>Id Proveedor Producto</th>
+		<th>Nombre Producto</th>
 		<th>Precio Compra Producto</th>
 		<th>Precio Venta Producto</th>
 		<th>Stock Producto</th>
@@ -16,8 +16,8 @@
 	<?php foreach($producto as $p){ ?>
     <tr>
 		<td><?php echo $p['id_producto']; ?></td>
+		<td><?php echo $p['nombre_persona']; ?></td>
 		<td><?php echo $p['nombre_producto']; ?></td>
-		<td><?php echo $p['id_proveedor_producto']; ?></td>
 		<td><?php echo $p['precio_compra_producto']; ?></td>
 		<td><?php echo $p['precio_venta_producto']; ?></td>
 		<td><?php echo $p['stock_producto']; ?></td>

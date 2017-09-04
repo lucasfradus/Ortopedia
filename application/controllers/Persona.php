@@ -16,6 +16,7 @@ class Persona extends CI_Controller{
         $this->load->helper(array('url','language'));
         $this->load->library('session');
         $this->lang->load('spanish');
+        $this->load->library('validaciones'); 
     } 
 
   function index()
@@ -78,22 +79,7 @@ class Persona extends CI_Controller{
                     } 
 
         $this->load->library('form_validation');
-		$this->form_validation->set_rules('dni_persona','DNI','required|numeric|exact_length[8]|is_unique[personas.dni_persona]',
-            array(
-                'required'      => 'El campo %s es obligatorio.', 
-                'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
-                ));
-		$this->form_validation->set_rules('nombre_persona','Nombre','required');
-		$this->form_validation->set_rules('apellido_persona','Apellido','required');
-		$this->form_validation->set_rules('tel_persona','Telefono','required|numeric');
-        $this->form_validation->set_rules('cp_persona','Código Postal','numeric');
-        $this->form_validation->set_rules('fecha_nac_persona','Fecha de Nacimiento','callback_date_check');
-        $this->form_validation->set_rules('mail_persona', 'Mail','valid_email|is_unique[personas.mail_persona]|required',
-                    array(
-                            'required'      => 'El campo %s es obligatorio.', 
-                            'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
-                    )
-                    );
+		$this->form_validation->set_rules($this->validaciones->Personas());
 		
 		if($this->form_validation->run())     
         {   
@@ -113,7 +99,7 @@ class Persona extends CI_Controller{
             $persona_id = $this->Persona_model->add_persona($params);
             //redireccionar al perfil del cliente
             $this->session->set_flashdata('success', lang('cli_new'));
-            redirect('Clientes');
+            redirect($id_tipo);
         }
         else
         {
@@ -135,6 +121,16 @@ class Persona extends CI_Controller{
                         return TRUE;
                 }
             }
+            //esta funcion chequea si ya existe algun cliente con ese mail que se esta tratando de cargar
+        function mail_check($str){
+            if ($this->Persona_model->ConsultarMAIL($str)){ 
+                $this->form_validation->set_message('mail_check', sprintf(lang('val_mail_check'), $str));
+                    return FALSE;
+            }
+                else{
+                        return TRUE;
+                }
+            }
                 //Esta funcion valida que la fecha ingresada no sea posterior a la fecha del dia
         function date_check($date){
             if( strtotime($date) > strtotime('now') ) {
@@ -150,42 +146,15 @@ class Persona extends CI_Controller{
      */
     function edit($id_persona)
     {   
-        $id_persona = $this->uri->segment(4);
-         $id_tipo = $this->uri->segment(3);
-           if ( strcasecmp( $id_tipo, 'Cliente' ) == 0 ){
-                        $id = '1';  
-                    }else if(strcasecmp( $id_tipo, 'Empleado' ) == 0){
-                        $id = '2';  
-                    }else if(strcasecmp( $id_tipo, 'Proveedor' ) == 0){
-                        $id = '3';  
-                    } 
         // check if the persona exists before trying to edit it
         $data['persona'] = $this->Persona_model->get_persona($id_persona);
-        
-        if(isset($data['persona']['id_persona']))
-        {
-            $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('dni_persona','DNI','required|numeric|exact_length[8]|is_unique[personas.dni_persona]',
-            array(
-                'required'      => 'El campo %s es obligatorio.', 
-                'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
-                ));
-        $this->form_validation->set_rules('nombre_persona','Nombre','required');
-        $this->form_validation->set_rules('apellido_persona','Apellido','required');
-        $this->form_validation->set_rules('tel_persona','Telefono','required|numeric');
-        $this->form_validation->set_rules('cp_persona','Código Postal','numeric');
-        $this->form_validation->set_rules('fecha_nac_persona','Fecha de Nacimiento','callback_date_check');
-        $this->form_validation->set_rules('mail_persona', 'Mail','valid_email|is_unique[personas.mail_persona]|required',
-                    array(
-                            'required'      => 'El campo %s es obligatorio.', 
-                            'is_unique'     => 'Este %s ya se encuentra cargado en el sistema.' 
-                    )
-		 );
+       
+        if(isset($data['persona']['id_persona'])){
+        $this->form_validation->set_rules($this->validaciones->PersonasEdit());
+ 
 			if($this->form_validation->run())     
             {   
                 $params = array(
-					'tipo_persona' => $this->input->post('tipo_persona'),
 					'dni_persona' => $this->input->post('dni_persona'),
 					'nombre_persona' => $this->input->post('nombre_persona'),
 					'apellido_persona' => $this->input->post('apellido_persona'),
@@ -198,12 +167,12 @@ class Persona extends CI_Controller{
                 );
 
                 $this->Persona_model->update_persona($id_persona,$params);            
-                redirect('persona/index');
+                redirect($data['persona']['nombre_tipo_persona']);
             }
             else
             {
-                $data['id_tipo'] = $id_tipo;
-                  $data['id'] = $id;
+               // $data['id_tipo'] = $id_tipo;
+               // $data['id'] = $id;
 				$this->load->model('Tipo_persona_model');
 				$data['all_tipo_persona'] = $this->Tipo_persona_model->get_all_tipo_persona();
 
@@ -221,12 +190,12 @@ class Persona extends CI_Controller{
     function remove($id_persona)
     {
         $persona = $this->Persona_model->get_persona($id_persona);
-
         // check if the persona exists before trying to delete it
         if(isset($persona['id_persona']))
         {
             $this->Persona_model->delete_persona($id_persona);
-            redirect('Clientes');
+            //redirijo al tipo de persona que traje
+            redirect($persona['nombre_tipo_persona']);
         }
         else
             show_error('The persona you are trying to delete does not exist.');

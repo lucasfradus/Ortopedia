@@ -67,7 +67,7 @@
 		<td><?php echo $p['cp_persona']; ?></td>
 		<td><?php echo $p['mail_persona']; ?></td>
 		<td><?php echo $p['razon_social_persona']; ?></td>
-		<td><a href="<?php echo site_url('Persona/Edit/'.$id.'/'.$p['id_persona']); ?>" class="glyphicon glyphicon-edit"></a> </td>
+		<td><a href="<?php echo site_url('Persona/Edit/'.$p['id_persona']); ?>" class="glyphicon glyphicon-edit"></a> </td>
 	<td>
          <a href="<?php echo site_url('persona/remove/'.$p['id_persona']); ?>" class="glyphicon glyphicon-remove"></a>
         </td>

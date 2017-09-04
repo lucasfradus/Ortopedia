@@ -20,6 +20,7 @@ class Productos_pedido_model extends CI_Model
             'id_pedido'=>$param,
             );
         $this->db->where($array);
+        $this->db->join('producto', 'id_productos = id_producto');
         return $this->db->get('productos_pedido')->result_array();
     }
         

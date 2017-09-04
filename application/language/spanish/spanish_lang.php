@@ -18,6 +18,7 @@ $lang['error_no_permission']    = 'No tienes permiso para realizar esta acción.
 
 //validaciones
 $lang['val_dni_check']          = 'El DNI %s ya se encuentra ingresado en el sistema.';
+$lang['val_mail_check']         = 'El e-mail %s ya se encuentra ingresado en el sistema.';
 $lang['val_date_check']         = 'La fecha %s es posterior a la fecha de hoy. Por favor introducir una fecha valida.';
 
 //clientes

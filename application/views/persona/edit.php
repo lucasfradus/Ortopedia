@@ -1,29 +1,10 @@
-<?php echo form_open('persona/edit/'.$persona['id_persona'],array("class"=>"form-horizontal")); ?>
+<?php echo form_open('Persona/Edit/'.$persona['id_persona'],array("class"=>"form-horizontal")); ?>
+
 
 <div align="center">
 			 <h2><?= lang('cli_edit_user_tittle') ?> </h2>
 	</div> 
 
-<input type="hidden" name="tipo_persona" value="<?= $id ?>">
-
-	<!--
-	<div class="form-group">
-		<label for="tipo_persona" class="col-md-4 control-label">Tipo Persona</label>
-		<div class="col-md-8">
-			<select name="tipo_persona" class="form-control">
-				<option value="">select tipo_persona</option>
-				<?php 
-				foreach($all_tipo_persona as $tipo_persona)
-				{
-					$selected = ($tipo_persona['id_tipo_persona'] == $persona['tipo_persona']) ? ' selected="selected"' : "";
-
-					echo '<option value="'.$tipo_persona['id_tipo_persona'].'" '.$selected.'>'.$tipo_persona['nombre_tipo_persona'].'</option>';
-				} 
-				?>
-			</select>
-		</div>
-	</div>
-	-->
 	<div class="form-group">
 		<label for="dni_persona" class="col-md-4 control-label"><span class="text-danger">*</span>Dni Persona</label>
 		<div class="col-md-8">

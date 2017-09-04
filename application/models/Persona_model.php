@@ -16,6 +16,7 @@ class Persona_model extends CI_Model
      */
     function get_persona($id_persona)
     {
+        $this->db->join('tipo_persona', 'personas.tipo_persona = id_tipo_persona');
         return $this->db->get_where('personas',array('id_persona'=>$id_persona))->row_array();
     }
         
@@ -81,6 +82,21 @@ class Persona_model extends CI_Model
         'dni_persona =' => $data
         );
         $this->db->select('dni_persona')
+                ->from('personas')
+                ->where($array);
+                $query = $this->db->get();
+                    if ($query->num_rows()>0){
+                         return true;
+                        }else{
+                            return false;
+                            }
+
+    }
+    function ConsultarMAIL($data){     
+    $array = array(
+        'mail_persona =' => $data
+        );
+        $this->db->select('mail_persona')
                 ->from('personas')
                 ->where($array);
                 $query = $this->db->get();
