@@ -45,7 +45,13 @@ class Validaciones{
 		return $reglas;
 	}
 
-
+	public function Ventum(){
+		$reglas = array(		
+		    array( 'field' => 'id_cliente_venta', 'label' => 'Id Cliente Venta', 'rules' => 'required'),
+		    array( 'field' => 'cantidad', 'label' => 'Cantidad', 'rules' => 'required|greater_than[1]' ),
+		);
+		return $reglas;
+	}
 
 
 
