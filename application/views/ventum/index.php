@@ -18,7 +18,7 @@
 		<td><?php echo $v['apellido_persona'].', '.$v['nombre_persona']; ?></td>
 		<td><?php echo $v['hora_venta']; ?></td>
 		<td><?php echo $v['fecha_venta']; ?></td>
-		<td><?php echo $v['monto']; ?></td>
+		<td><?php echo"$ ". $v['monto']; ?></td>
 		<td>
 			<a href="<?php echo site_url('ventum/view/'.$v['id_venta']); ?>" class="btn btn-success btn-xs">Ver Detalle</a> 
             <a href="<?php echo site_url('ventum/edit/'.$v['id_venta']); ?>" class="btn btn-info btn-xs">Edit</a> 

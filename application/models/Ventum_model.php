@@ -17,6 +17,7 @@ class Ventum_model extends CI_Model
     function get_ventum($id_venta)
     {
          $this->db->join('personas', 'id_cliente_venta = id_persona');
+         $this->db->join('users', 'venta.id_user=users.id');
         return $this->db->get_where('venta',array('id_venta'=>$id_venta))->row_array();
     }
         
@@ -27,6 +28,7 @@ class Ventum_model extends CI_Model
     {
         $this->db->order_by('id_venta', 'desc');
            $this->db->join('personas', 'id_cliente_venta = id_persona');
+
         return $this->db->get('venta')->result_array();
     }
         

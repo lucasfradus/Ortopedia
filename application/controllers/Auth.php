@@ -39,7 +39,7 @@ class Auth extends CI_Controller {
 			{
 				$this->data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
 			}
-			$this->load->view('header.php');
+			$this->load->view('layouts/main');
 			$this->_render_page('auth/index', $this->data);
 		}
 	}
@@ -47,7 +47,7 @@ class Auth extends CI_Controller {
 	// log the user in
 	public function login()
 	{
-			$this->load->view('header.php');
+			$this->load->view('layouts/main');
 		$this->data['title'] = $this->lang->line('login_heading');
 
 		//validate form input
@@ -66,7 +66,7 @@ class Auth extends CI_Controller {
 				//redirect them back to the home page
 
 				$this->session->set_flashdata('success', $this->ion_auth->messages());
-				redirect('Clientes', 'refresh');
+				redirect('Cliente', 'refresh');
 			}
 			else
 			{
@@ -617,12 +617,12 @@ class Auth extends CI_Controller {
 			    	// redirect them back to the admin page if admin, or to the base url if non admin
 				    $this->session->set_flashdata('success', $this->ion_auth->messages() );
 				    if ($this->ion_auth->is_admin()){
-						//$this->session->set_flashdata('success', 'Los datos del Usuario han sido modificados correctamente!');
+						$this->session->set_flashdata('success', 'Los datos del Usuario han sido modificados correctamente!');
 						redirect('auth', 'refresh');
 					}
 					else{
-							//$this->session->set_flashdata('success', 'Los datos del Usuario han sido modificados correctamente!');
-						redirect('Clientes/', 'refresh');
+							$this->session->set_flashdata('success', 'Los datos del Usuario han sido modificados correctamente!');
+						redirect('/', 'refresh');
 					}
 
 			    }
@@ -719,10 +719,10 @@ class Auth extends CI_Controller {
 
 		$user = $this->ion_auth->user()->row();
 		$data['usuario'] =$user->first_name;
-		$data['id'] =$user->id;
+		$data['id_user'] =$user->id;
 
-		$this->load->view('header.php');
-		$this->load->view('navbar.php', $data);
+		$this->load->view('layouts/main', $data);
+		$this->load->view('navbar', $data);
 		$this->_render_page('auth/edit_user', $this->data);
 	}
 

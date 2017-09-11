@@ -11,6 +11,7 @@ class Producto extends CI_Controller{
         $this->load->model('Producto_model');
         $this->load->library('form_validation');
         $this->load->library('validaciones'); 
+         $this->load->library('ion_auth');  
     } 
 
     /*
@@ -18,12 +19,17 @@ class Producto extends CI_Controller{
      */
     function index()
     {
-        $data['producto'] = $this->Producto_model->get_all_producto();
-        $this->load->model('Persona_model');
-            $data['all_personas'] = $this->Persona_model->get_all_personas_Proveedores();
-        
-        $data['_view'] = 'producto/index';
-        $this->load->view('layouts/main',$data);
+         $user = $this->ion_auth->user()->row();
+            if($this->ion_auth->loginCheck() && $this->ion_auth->RolCheck($user->id, $this->config->item('VerProductos'))){
+                $data['usuario'] =$user->first_name;
+                $data['id_user'] =$user->id;   
+                        $data['producto'] = $this->Producto_model->get_all_producto();
+                        $this->load->model('Persona_model');
+                            $data['all_personas'] = $this->Persona_model->get_all_personas_Proveedores();
+                        
+                        $this->load->view('navbar', $data);
+                        $this->load->view('producto/index',$data);
+    }
     }
 
     /*

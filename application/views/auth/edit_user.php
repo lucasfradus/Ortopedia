@@ -73,7 +73,7 @@
                   }
               ?>
               <input type="checkbox" name="groups[]" value="<?php echo $group['id'];?>"<?php echo $checked;?>>
-              <?php echo htmlspecialchars($group['name'],ENT_QUOTES,'UTF-8');?>
+              <?php echo htmlspecialchars($group['description'],ENT_QUOTES,'UTF-8');?>
             </label> </div>
           <?php endforeach?>
 
@@ -82,7 +82,7 @@
       <table class="table table-striped" style="width:60%" align=center>
 				  <thead>
     						<tr>
-    							<td><strong><strong/></td>
+    	             <td><strong><strong/></td>
     							<td><strong>Rol<strong/></td>
     							<td><strong>Descripcion<strong/></td>
     						</tr>
@@ -98,15 +98,13 @@
                                 }
                             }
                           } ?>
-
-                <tr>
-                        <td><input type="checkbox" name="roles[]" value="<?= $rol->id_rol?>"<?= $checked;?>></td>
-                        <td><?= $rol->nombre_rol ?></td>
-                        <td><?=$rol->descripcion_rol?></td>
+                <tr> 
+                        <th><input type="checkbox" name="roles[]" class="select-all checkbox"  value="<?= $rol->id_rol?>"<?= $checked;?>></th>
+                        <th><?= $rol->nombre_rol ?></th>
+                        <th><?=$rol->descripcion_rol?></th>
                       </label> 
                     <?php }?>
                 <tr>
-
 </table>
 
       <?php endif ?>
