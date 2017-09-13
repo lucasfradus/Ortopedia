@@ -2350,16 +2350,31 @@ class Ion_auth_model extends CI_Model
 	}
 
 	function listarRolesPorId($idUser){
-	$result = array();
-	$this->db->select('role_id')
-	->from('roles_groups')
-	->where('user_id',$idUser);
-	$query = $this->db->get();
-		if ($query->num_rows()>0){
-		 return $query;
-	}else{
-			return false;
+		$result = array();
+			$this->db->select('role_id')
+				->from('roles_groups')
+				->where('user_id',$idUser);
+					$query = $this->db->get();
+						if ($query->num_rows()>0){
+						 return $query;
+						}else{
+							return false;
+		}
 	}
-	}
+	function RolCheck($idUser,$idRol){
+                $where = array(
+                    'user_id' => $idUser,
+                    'role_id' => $idRol
+                );
+                $this->db->select('id')
+                                    ->from('roles_groups')
+                                    ->where($where);
+                                    $query = $this->db->get();
+                                        if ($query->num_rows()>0){
+                                            return true;
+                                        }else {
+                                            return false;
+                                        }
+            }
 
 }

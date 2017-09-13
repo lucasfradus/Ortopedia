@@ -87,3 +87,10 @@ a:hover.back-to-top {
     background-color: #000;
 }
 </style>
+
+
+<footer class="footer">
+      <div class="container">
+        <p class="text-muted">Sistema desarrollado por LUCAS FRADUSCO. no por el TOP</p>
+      </div>
+    </footer>

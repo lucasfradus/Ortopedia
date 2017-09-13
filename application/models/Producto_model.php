@@ -11,6 +11,18 @@ class Producto_model extends CI_Model
         parent::__construct();
     }
     
+      /*
+     * function to update producto
+     */
+    function update_producto_stock($id_producto)
+    {
+        $this->db->where('id_producto',$id_producto);
+          $this->db->set('stock_producto', 'stock_producto-1', FALSE);
+        return $this->db->update('producto');
+    }
+
+
+
     /*
      * Get producto by id_producto
      */

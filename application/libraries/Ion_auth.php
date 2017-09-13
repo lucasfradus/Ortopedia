@@ -539,5 +539,32 @@ class Ion_auth
 		 */
 		return $check_all;
 	}
+	public function loginCheck(){
+            if (!$this->ion_auth->logged_in()){
+                    $this->session->set_flashdata('error', sprintf(lang('error_no_login')));
+                                redirect('auth/login');
+                }else
+                    return true;
+        }
+
+        public function PermisoCheck($grupo){
+            if (!$this->ion_auth->in_group($grupo)){
+                        $this->session->set_flashdata('error',$this->lang('error_no_permission'));
+                                redirect('Clientes/');
+                    }else
+                        return true;
+
+        }
+
+        public function RolCheck($idUser, $idRol){
+            if (!$this->ion_auth_model->RolCheck($idUser, $idRol)){
+                        $this->session->set_flashdata('error', $this->lang->line('error_no_permission'));
+                                redirect('Clientes/');
+                       
+                        }else
+                           return true;
+        }
+
+
 
 }

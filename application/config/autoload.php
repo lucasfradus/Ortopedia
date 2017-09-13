@@ -103,8 +103,9 @@ $autoload['helper'] = array('security','form','url');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('pagination');
-
+$autoload['config'] = array(
+  'config_custom'
+);
 /*
 | -------------------------------------------------------------------
 |  Auto-load Language files

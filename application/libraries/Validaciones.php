@@ -15,7 +15,7 @@ class Validaciones{
 		    array( 'field' => 'precio_compra_producto', 'label' => 'Precio Compra Producto', 'rules' => 'greater_than[0]' ),
 		    array( 'field' => 'precio_venta_producto', 'label' => 'Precio Venta Producto', 'rules' => 'greater_than[0]' ),
 		    array( 'field' => 'stock_producto', 'label' => 'Stock Producto', 'rules' => 'greater_than[0]|integer' ),
-		    array( 'field' => 'stock_minimo_producto', 'label' => 'Stock Minimo Producto', 'rules' => 'greater_than[0]|interger' )
+		    array( 'field' => 'stock_minimo_producto', 'label' => 'Stock Minimo Producto', 'rules' => 'greater_than[0]|integer' )
 		);
 		return $reglas;
 	}
@@ -45,13 +45,7 @@ class Validaciones{
 		return $reglas;
 	}
 
-	public function Ventum(){
-		$reglas = array(		
-		    array( 'field' => 'id_cliente_venta', 'label' => 'Id Cliente Venta', 'rules' => 'required'),
-		    array( 'field' => 'cantidad', 'label' => 'Cantidad', 'rules' => 'required|greater_than[1]' ),
-		);
-		return $reglas;
-	}
+
 
 
 
